@@ -1,42 +1,52 @@
 import { Component } from 'react'
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios'
 
 import { Form, Button } from 'react-bootstrap'
 
 import TodoList from './components/TodoList'
 
+const apiUrl = 'https://arcane-basin-04555.herokuapp.com'
+
 class App extends Component {
   state = {
-    todos: [
-      {
-        label: "TODO 1",
-        completed: false,
-      },
-      {
-        label: "TODO 2",
-        completed: false,
-      },
-      {
-        label: "TODO 3",
-        completed: true,
-      },
-    ]
+    todos: []
+  }
+
+  componentDidMount() {
+    axios({
+      url: `${apiUrl}/todos`,
+    }).then(({data: { todos }}) => {
+      if (todos) {
+        this.setState({
+          todos: todos.map(todo => ({...todo, created: true})) 
+        })
+      }
+    })
   }
 
   addTodo = (label) => {
     const newTodos = [...this.state.todos]
 
     if (label) {
-      this.setState({
-        todos: [...newTodos, { label, completed: false }]
-      })
+      axios.post(`${apiUrl}/todo`, { label })
+        .then(({ data: { todo } }) => {
+          this.setState({
+            todos: [
+              ...newTodos,
+              todo
+            ]
+          })
+        })
     }
   }
 
-  updateTodo = (label) => {
+  updateTodo = (id) => {
     const newTodos = [...this.state.todos]
-    const todo = newTodos.find(currentTodo => currentTodo.label === label)
+    const todo = newTodos.find(
+      ({ _id }) => _id === id
+    )
 
     if (todo) {
       todo.completed = !todo.completed
@@ -49,6 +59,8 @@ class App extends Component {
 
   render() {
     const { todos } = this.state
+
+    console.log(todos)
 
     return (
       <div className="App">

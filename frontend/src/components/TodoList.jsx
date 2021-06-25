@@ -3,11 +3,11 @@ import { ListGroup } from "react-bootstrap";
 function TodoList({ todos, onTodoClicked }) {
   return (
     <ListGroup>
-      {todos.map(({ label, completed }, index) => (
+      {todos.map(({ label, completed, _id }) => (
         <ListGroup.Item
-          key={index}
+          key={_id}
           variant={completed ? "success" : ""}
-          onClick={() => onTodoClicked(label)}
+          onClick={() => onTodoClicked(_id)}
         >
           {label}
         </ListGroup.Item>
