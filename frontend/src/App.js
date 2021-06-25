@@ -9,6 +9,21 @@ import TodoList from './components/TodoList'
 
 const apiUrl = 'https://arcane-basin-04555.herokuapp.com'
 
+function searchTodo(list, id, updated = false) {
+  const newTodos = [...list]
+  const todo = newTodos.find(
+    ({ _id }) => _id === id
+  )
+
+  if (todo && !updated) {
+    todo.completed = !todo.completed
+  }
+  
+  todo.updated = updated
+
+  return newTodos
+}
+
 class App extends Component {
   state = {
     todos: []
@@ -20,7 +35,7 @@ class App extends Component {
     }).then(({data: { todos }}) => {
       if (todos) {
         this.setState({
-          todos: todos.map(todo => ({...todo, created: true})) 
+          todos: todos.map(todo => ({...todo, updated: true})) 
         })
       }
     })
@@ -35,7 +50,7 @@ class App extends Component {
           this.setState({
             todos: [
               ...newTodos,
-              todo
+              {...todo, updated: true}
             ]
           })
         })
@@ -43,24 +58,24 @@ class App extends Component {
   }
 
   updateTodo = (id) => {
-    const newTodos = [...this.state.todos]
-    const todo = newTodos.find(
-      ({ _id }) => _id === id
-    )
+    const { todos } = this.state
 
-    if (todo) {
-      todo.completed = !todo.completed
-    }
+    axios.put(`${apiUrl}/todo/${id}`)
+      .then(({ data: { updated } }) => {
+        if (updated) {
+          this.setState({
+            todos: searchTodo(todos, id, true)
+          })
+        }
+      })
 
     this.setState({
-      todos: newTodos
+      todos: searchTodo(todos, id)
     })
   }
 
   render() {
     const { todos } = this.state
-
-    console.log(todos)
 
     return (
       <div className="App">
