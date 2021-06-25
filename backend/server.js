@@ -17,9 +17,9 @@ app.post('/todo', async (request, response) => {
   const { label, completed } = request.body;
 
   try {
-    await TodoModel.create({ label, completed })
+    const todo = await TodoModel.create({ label, completed })
     
-    response.json({ created: true })
+    response.json({ todo })
   } catch (error) {
     response.status(500).json({ error })
   }
