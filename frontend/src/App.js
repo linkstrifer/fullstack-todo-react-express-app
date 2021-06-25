@@ -9,7 +9,7 @@ import TodoList from './components/TodoList'
 
 const apiUrl = 'https://arcane-basin-04555.herokuapp.com'
 
-function searchTodo(list, id, updated = false) {
+function searchAndUpdateTodo(list, id, updated = false) {
   const newTodos = [...list]
   const todo = newTodos.find(
     ({ _id }) => _id === id
@@ -64,13 +64,13 @@ class App extends Component {
       .then(({ data: { updated } }) => {
         if (updated) {
           this.setState({
-            todos: searchTodo(todos, id, true)
+            todos: searchAndUpdateTodo(todos, id, true)
           })
         }
       })
 
     this.setState({
-      todos: searchTodo(todos, id)
+      todos: searchAndUpdateTodo(todos, id)
     })
   }
 
