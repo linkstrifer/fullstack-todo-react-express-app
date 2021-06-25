@@ -77,6 +77,8 @@ class App extends Component {
   render() {
     const { todos } = this.state
 
+    console.log(todos)
+
     return (
       <div className="App">
         <TodoList todos={todos} onTodoClicked={this.updateTodo} />

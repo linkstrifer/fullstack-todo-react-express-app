@@ -3,8 +3,11 @@ import { ListGroup } from "react-bootstrap";
 function TodoList({ todos, onTodoClicked }) {
   return (
     <ListGroup>
-      {todos.map(({ label, completed, _id, updated }) => {
+      {todos.map(({ label, completed, _id, updated, createdDate }) => {
         let variant = "";
+        const date = new Date(createdDate).toLocaleString("es-CO", {
+          timezone: "UTC",
+        });
 
         if (!updated) {
           variant = "warning";
@@ -18,7 +21,8 @@ function TodoList({ todos, onTodoClicked }) {
             variant={variant}
             onClick={() => onTodoClicked(_id)}
           >
-            {label}
+            <div>{label}</div>
+            <small>{date}</small>
           </ListGroup.Item>
         );
       })}
