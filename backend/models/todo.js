@@ -5,6 +5,10 @@ const todoSchema = mongoose.Schema({
   completed: {
     type: Boolean,
     default: false,
+  },
+  createdDate: {
+    type: Date,
+    default: Date.now
   }
 })
 

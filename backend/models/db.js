@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const url = 'mongodb+srv://rinku:sutoriferu@cluster0.iibmd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+const url = process.env.DB || 'mongodb://localhost:27017/todos'
 
 const db = mongoose.connection
 
